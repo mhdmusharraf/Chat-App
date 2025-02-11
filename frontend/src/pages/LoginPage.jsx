@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import { Eye, EyeOff, Loader2, Lock, Mail, MessageSquare } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate  } from "react-router-dom";
 import AuthImagePattern from "../components/AuthImagePattern";
 
 const LoginPage = () => {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
@@ -13,7 +14,11 @@ const LoginPage = () => {
   const { login, isLoggingIn } = useAuthStore();
   const handleSubmit = async (e) => {
     e.preventDefault();
-    login(formData);
+    const success = await login(formData); // Ensure login returns a success status
+    if (success) {
+      navigate("/"); // Redirect to home page on successful login
+    }
+    
   };
   return (
     <div className="min-h-screen grid lg:grid-cols-2">
